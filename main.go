@@ -1,7 +1,6 @@
 package main
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/krillissue/broccoli"
@@ -9,9 +8,9 @@ import (
 )
 
 var (
-	application_port string
-	storage_folder   string
-	cors_origin      string
+	host_addr      string
+	storage_folder string
+	cors_origin    string
 )
 
 func main() {
@@ -20,21 +19,17 @@ func main() {
 		Short: "Serve Broccoli",
 		Long:  "Serve a Broccoli file server",
 		Run: func(cmd *cobra.Command, args []string) {
-			port, err := strconv.ParseUint(application_port, 0, 16)
+			defer broccoli.NewBroccoli(host_addr, storage_folder, cors_origin)
 
-			if err != nil {
-				panic(err)
-			}
-
-			defer broccoli.NewBroccoli(uint16(port), storage_folder, cors_origin)
 			for {
 				time.Sleep(time.Second * 10)
 			}
 		},
 	}
 
-	cmd.Flags().StringVarP(&application_port, "port", "p", "8080", "Port to expose webserver on.")
-	cmd.Flags().StringVarP(&storage_folder, "folder", "f", "uploads", "Folder to store uploaded data on.")
+	cmd.Flags().StringVarP(&host_addr, "host", "p", "0.0.0.0:8080", "Host address to expose webserver on.")
+	cmd.Flags().StringVarP(&storage_folder, "folder", "f", "server_files", "Folder containing stuff for the webserver to host.")
+	cmd.Flags().StringVarP(&cors_origin, "origin", "f", "*", "CORS origin for the webserver to work on.")
 
 	rootCmd := &cobra.Command{Use: "broccoli-cli"}
 	rootCmd.AddCommand(cmd)
