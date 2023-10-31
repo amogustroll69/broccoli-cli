@@ -29,7 +29,7 @@ func main() {
 
 	cmd.Flags().StringVarP(&host_addr, "host", "p", "0.0.0.0:8080", "Host address to expose webserver on.")
 	cmd.Flags().StringVarP(&storage_folder, "folder", "f", "server_files", "Folder containing stuff for the webserver to host.")
-	cmd.Flags().StringVarP(&cors_origin, "origin", "f", "*", "CORS origin for the webserver to work on.")
+	cmd.Flags().StringVarP(&cors_origin, "origin", "o", "*", "CORS origin for the webserver to work on.")
 
 	rootCmd := &cobra.Command{Use: "broccoli-cli"}
 	rootCmd.AddCommand(cmd)
