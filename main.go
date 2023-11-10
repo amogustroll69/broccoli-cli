@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"os"
 	"time"
 
 	"github.com/krillissue/broccoli"
@@ -19,7 +21,17 @@ func main() {
 		Short: "Serve Broccoli",
 		Long:  "Serve a Broccoli file server",
 		Run: func(cmd *cobra.Command, args []string) {
-			defer broccoli.NewBroccoli(host_addr, storage_folder, cors_origin)
+			info, err := os.Stat(storage_folder)
+
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			if !info.IsDir() {
+				log.Fatalln("Folder must be a directory")
+			}
+
+			broccoli.NewBroccoli(host_addr, storage_folder, cors_origin)
 
 			for {
 				time.Sleep(time.Second * 10)
